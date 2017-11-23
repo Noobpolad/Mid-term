@@ -23,13 +23,13 @@ class bankAccount:
 			return self._prev
 
 	def setID(self,ID):
-		self._id = ID
+		self._id = int(ID)
 
 	def setName(self,name):
 		self._name = name
 	
 	def setBalance(self,balance):
-		self._balance = balance
+		self._balance = int(balance)
 
 	def	setNext(self,next):
 		self._next = next
@@ -43,7 +43,7 @@ class doubleLinkedList:
 		self._head = None
 		self._tail = None
 
-#Add the new account 
+	#Add the new account 
 
 	def add(self,IDcode,Name):
 		newest = bankAccount(IDcode,Name)
@@ -61,11 +61,7 @@ class doubleLinkedList:
 		if iterator.getID() == code and iterator == self._head:
 			self._head = iterator.getNext()
 			iterator = iterator.getNext().setPrevious(None)
-			iterator = self._head
-		elif self._head.getID() == code and self._tail.getID() == code and self._head == self._tail:
-			self._head = None
-			self._tail = None	
-		while iterator != None:
+		while 1:
 			if iterator.getID() == code and iterator != self._tail:
 				iterator = iterator.getPrevious().setNext(iterator.getNext())
 				break		
@@ -105,7 +101,7 @@ class doubleLinkedList:
 			print(str(iterator.getID()) + ":" + iterator.getName() + " " + str(iterator.getBalance()))
 			iterator = iterator.getNext()
 	
-#Put the money on balance from the certain account
+	#Put the money on balance from the certain account
 
 	def deposit(self,IDcode,Ammount):
 		iterator = self._head
@@ -115,15 +111,20 @@ class doubleLinkedList:
 				break
 			iterator = iterator.getNext()	
 
-#Take the money from balance from the certain account and give an error if there is lack of money
+	#Take the money from balance from the certain account and give an error if there is lack of money
 
 	def withDraw(self,IDcode,Ammount):			
 		iterator = self._head
+		correctID = False
 		while iterator != None:
-			if iterator.getID() == IDcode and int(iterator.getBalance()) - int(Ammount) >= 0:
-				iterator = iterator.setBalance(int(iterator.getBalance()) - int(Ammount))	
+			if iterator.getID() == IDcode and iterator.getBalance() - Ammount >= 0:
+				iterator = iterator.setBalance(iterator.getBalance() - Ammount)	
+				correctID = True
 				break
-			elif iterator.getID() == IDcode and int(iterator.getBalance()) - int(Ammount) < 0:
-				print("Not possible to make a transaction at the account id: " + str(iterator.getID()))
+			elif iterator.getID() == IDcode and iterator.getBalance() - Ammount < 0:
+				print("Not possible to make a transaction at the account ID: " + str(iterator.getID()))
+				correctID = True
 				break
 			iterator = iterator.getNext()	
+		if correctID == False:
+			print("There is no such account with ID: " + str(IDcode))		
