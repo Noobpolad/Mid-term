@@ -58,16 +58,18 @@ class doubleLinkedList:
 
 	def delete(self,code):
 		iterator = self._head
-		if iterator.getID() == code and iterator == self._head:
-			self._head = iterator.getNext()
-			iterator = iterator.getNext().setPrevious(None)
 		while 1:
-			if iterator.getID() == code and iterator != self._tail:
-				iterator = iterator.getPrevious().setNext(iterator.getNext())
+			if iterator.getID() == code and iterator == self._head:
+				self._head = iterator.getNext()
+				iterator.getNext().setPrevious(None)
+				break
+			elif iterator.getID() == code and iterator != self._tail:
+				iterator.getNext().setPrevious(iterator.getPrevious())
+				iterator.getPrevious().setNext(iterator.getNext())
 				break		
 			elif iterator.getID() == code and iterator == self._tail:
 				self._tail = iterator.getPrevious()
-				iterator = iterator.getPrevious().setNext(None)
+				iterator.getPrevious().setNext(None)
 				break
 
 			iterator = iterator.getNext()	
@@ -107,7 +109,7 @@ class doubleLinkedList:
 		iterator = self._head
 		while iterator != None:
 			if iterator.getID() == IDcode:
-				iterator = iterator.setBalance(int(iterator.getBalance()) + int(Ammount))
+				iterator.setBalance(int(iterator.getBalance()) + int(Ammount))
 				break
 			iterator = iterator.getNext()	
 
@@ -118,7 +120,7 @@ class doubleLinkedList:
 		correctID = False
 		while iterator != None:
 			if iterator.getID() == IDcode and iterator.getBalance() - Ammount >= 0:
-				iterator = iterator.setBalance(iterator.getBalance() - Ammount)	
+				iterator.setBalance(iterator.getBalance() - Ammount)	
 				correctID = True
 				break
 			elif iterator.getID() == IDcode and iterator.getBalance() - Ammount < 0:
